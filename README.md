@@ -7,10 +7,16 @@ Implementations may include:
   - Many, many more
 
 ### Version
-0.1.1 - BETA!
+0.1.2 - BETA!
+
+####Changes in 0.1.2
+	- Added GET functionality
+	- PEP8 compliant and docstrings
+	- Small optimization fixes
 
 ### Usage
-A simple usage example was provided within the pacakge. Simply import Insta from the Insta package, instantiate an instance of the Insta class with your username and password (or Facebook email and password), and then call the login function. It will return either -1 (fail) or 0 (success).
+A simple usage example was provided within the pacakge. Simply import Insta from the Insta package, instantiate an instance of the Insta class with your username and password (or Facebook email and password), and then call the login function. It will return either -1 (fail) or 0 (success). This should not be used in commercial products, it does use 
+the Instagram private API and therefore may or may not cease to work at some point.
 
 ### Tech
 
@@ -27,8 +33,8 @@ pip install requests
 
 ### Todos
 
- - GET functionality
  - Concurrent requests
+
 
 License
 ----
