@@ -16,7 +16,9 @@ Implementations may include:
 
 ### Usage
 A simple usage example was provided within the pacakge. Simply import Insta from the Insta package, instantiate an instance of the Insta class with your username and password (or Facebook email and password), and then call the login function. It will return either -1 (fail) or 0 (success). This should not be used in commercial products, it does use 
-the Instagram private API and therefore may or may not cease to work at some point.
+the Instagram private API and therefore may or may not cease to work at some point. 
+*Note: The point of this is to be as minimal as possible. I will more than likely not support functions like uploading images, searching, etc... as it just adds clutter
+to the module which is meant to be as a minimalist solution for developers to use.
 
 ### Tech
 
@@ -33,7 +35,7 @@ pip install requests
 
 ### Todos
 
- - Concurrent requests
+ - Ensure module is working without bugs
 
 
 License
