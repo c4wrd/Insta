@@ -1,7 +1,7 @@
 from Insta import Insta
 
 def main():
-	insta = Insta("jukehq", "no password for you")
+	insta = Insta("username", "password")
 	if insta.login() == 0:
 		print insta.username
 	

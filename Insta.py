@@ -4,16 +4,18 @@ import json
 import hashlib
 import uuid
 
-STATUS_FAILED = -1
-STATUS_OK = 0
-
 class Insta(object):
+		
+	STATUS_FAILED = -1
+	STATUS_OK = 0
 		
 	def __init__(self,user,pw):
 		self.user = user
 		self.pw = pw
 		self.genGuid()
 		self.genDeviceId()
+		self.logged_in = False
+		self.session = requests.Session()
 		
 	def genDeviceId(self):
 		self.device_id = "android-%s" % self.guid.replace("-","")[0:16]
@@ -23,12 +25,22 @@ class Insta(object):
 		self.guid = str(uuid.uuid1())
 		pass
 	
+	def get(self,url):
+		if self.logged_in:
+			headers = {
+				"user-agent":self.getUserAgent()
+			}
+			return self.session.get("https://instagram.com/api/v1/" + url,headers=headers)
+		else:
+			print "You must be logged in before issuing requests"
+			return -1
+	
 	def getUserAgent(self):
 		return "Instagram 6.21.2 Android (19/4.4.2; 480dpi; 1152x1920; Meizu; MX4; mx4; mt6595; en_US)"
 	
 	def loadUser(self,data):
 		if data['status'] != 'ok':
-			return STATUS_FAILED
+			return self.STATUS_FAILED
 		try:
 			user = data['logged_in_user']
 			self.username = user['username']
@@ -36,42 +48,43 @@ class Insta(object):
 			self.fullname = user['full_name']
 			self.fbuid = user['fbuid']
 			self.private = user['is_private']
-			return STATUS_OK
+			self.logged_in = True
+			return self.STATUS_OK
 		except KeyError:
 			print data
-			return STATUS_FAILED
+			return self.STATUS_FAILED
 		
 	
 	def login(self):
-		data = {
-			"device_id":self.device_id,
-			"guid":self.guid,
-			"username":self.user,
-			"password":self.pw,
-			"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"
-		}
-		data = json.dumps(data)
-		signedData = self.signMessage(data) + "." + data
+		data = json.dumps( 
+			{
+				"device_id":self.device_id,
+				"guid":self.guid,
+				"username":self.user,
+				"password":self.pw,
+				"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"
+			}
+		)
 		
-		req = json.loads(self.post("accounts/login/", {
-			"signed_body":signedData,
-			"ig_sig_key_version":6
-		}).text)
+		req = json.loads(
+				self.post("accounts/login/", {
+				"signed_body":self.signMessage(data) + "." + data,
+				"ig_sig_key_version":6
+			}).text
+		)
 		
-		if self.loadUser(req) == STATUS_FAILED:
+		if self.loadUser(req) == Insta.STATUS_FAILED:
 			print "Failed to login...\nStatus: %s\nMessage: %s" % (req['status'], req['message'])
-			return STATUS_FAILED	
+			return self.STATUS_FAILED	
 		else:
-			return STATUS_OK
+			return self.STATUS_OK
 		
 		
 	def post(self,url,contents):
 		headers = {
 			"user-agent":self.getUserAgent()
 		}
-		
-		req = requests.post("https://instagram.com/api/v1/" + url,data=contents,headers=headers)
-		return req
+		return self.session.post("https://instagram.com/api/v1/" + url,data=contents,headers=headers)
 		
 	def signMessage(self,data):
 		return hmac.new("25eace5393646842f0d0c3fb2ac7d3cfa15c052436ee86b5406a8433f54d24a5", data, hashlib.sha256).hexdigest()
