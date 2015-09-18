@@ -16,6 +16,7 @@ class Insta(object):
         self.genGuid()
         self.genDeviceId()
         self.logged_in = False
+        self.user_info = []
         self.session = requests.Session()
 
     def genDeviceId(self):
@@ -51,27 +52,40 @@ class Insta(object):
     def getUserAgent(self):
         return "Instagram 6.21.2 Android (19/4.4.2; 480dpi; \
         1152x1920; Meizu; MX4; mx4; mt6595; en_US)"
-
-    def loadUser(self, data):
-        if data['status'] != 'ok':
-            return self.STATUS_FAILED
+        
+    def getInfo(self,key):
+        """
+        Returns the key associated with the user's information
+        
+        "username" - Username of the user
+        "profile_pic_url" - URL of user's profile profile_picture
+        "full_name" - Full name of the user
+        "fbuid" - Facebook ID of user
+        "is_private" - 'true' if user's profile is private, 
+            'false' if public
+        """
         try:
-            user = data['logged_in_user']
-            self.username = user['username']
-            self.profile_picture = user['profile_pic_url']
-            self.fullname = user['full_name']
-            self.fbuid = user['fbuid']
-            self.private = user['is_private']
-            self.logged_in = True
-            return self.STATUS_OK
+            return self.user_info[key]
         except KeyError:
-            print data
-            return self.STATUS_FAILED
+            return "null"
 
     def login(self):
         """
         Logs in and verifies the users supplied credentials when creating
                 an instance of Insta.
+                
+        If login is successful, we will setup a dictionary that
+        contain the following keys:
+            
+        "username" - Username of the user
+        "profile_pic_url" - URL of user's profile profile_picture
+        "full_name" - Full name of the user
+        "fbuid" - Facebook ID of user
+        "is_private" - 'true' if user's profile is private, 
+            'false' if public
+            
+        *Additional keys may be contained, but these are the few that are guaranteed
+        to exist within the dictionary
         """
         data = json.dumps(
             {
@@ -83,20 +97,21 @@ class Insta(object):
                 "charset=UTF-8"
             }
         )
-
-        req = json.loads(
+        
+        responseJson = json.loads(
             self.post("accounts/login/", {
                 "signed_body": self.signMessage(data) + "." + data,
                 "ig_sig_key_version": 6
             }).text
         )
 
-        if self.loadUser(req) == Insta.STATUS_FAILED:
+        if responseJson['status'] != 'ok':
             print "Failed to login...\nStatus: %s\nMessage: %s" % (
-                req['status'], req['message']
+                responseJson['status'], responseJson['message']
             )
             return self.STATUS_FAILED
         else:
+            self.user_info = responseJson['logged_in_user']
             return self.STATUS_OK
 
     def post(self, url, contents):
