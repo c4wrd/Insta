@@ -44,7 +44,7 @@ You need to install the RestSharp library with NuGet
 
 ```sh
 Install-Package RestSharp
-'''
+```
 
 ### Todos
 
