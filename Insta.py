@@ -43,7 +43,7 @@ class Insta(object):
             }
             return self.session.get(
                 "https://instagram.com/api/v1/" + url,
-                headers=headers
+                headers=headers, verify=False
             )
         else:
             print "You must be logged in before issuing requests"
@@ -131,7 +131,8 @@ class Insta(object):
         }
         return self.session.post("https://instagram.com/api/v1/" + url,
                                  data=contents,
-                                 headers=headers
+                                 headers=headers,
+								 verify=False
                                  )
 
     def signMessage(self, data):

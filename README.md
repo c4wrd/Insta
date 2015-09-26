@@ -1,13 +1,17 @@
-# Insta - Private Instagram API for Python
+# Insta - Private Instagram API for Python and .NET
 
-Insta is a small wrapper built for giving private API access to python users. 
+Insta is a small wrapper built for giving private API access to python/.NET users.
 Implementations may include:
   - Login Validation
   - Upload pictures from cloud scripts
   - Many, many more
 
 ### Version
-0.1.2 - BETA!
+0.1.3 - BETA!
+
+###Changes in 0.1.3
+  - Added certificate bypass for some experiencing cert issues with IG
+  - Introducing Insta.cs, a .NET couterpart for use in .NET applications. Works flawlessly.
 
 ####Changes in 0.1.2
 	- Added GET functionality
@@ -15,8 +19,8 @@ Implementations may include:
 	- Small optimization fixes
 
 ### Usage
-A simple usage example was provided within the pacakge. Simply import Insta from the Insta package, instantiate an instance of the Insta class with your username and password (or Facebook email and password), and then call the login function. It will return either -1 (fail) or 0 (success). This should not be used in commercial products, it does use 
-the Instagram private API and therefore may or may not cease to work at some point. 
+A simple usage example was provided within the pacakge. Simply import Insta from the Insta package, instantiate an instance of the Insta class with your username and password (or Facebook email and password), and then call the login function. It will return either -1 (fail) or 0 (success). This should not be used in commercial products, it does use
+the Instagram private API and therefore may or may not cease to work at some point.
 *Note: The point of this is to be as minimal as possible. I will more than likely not support functions like uploading images, searching, etc... as it just adds clutter
 to the module which is meant to be as a minimalist solution for developers to use.
 
@@ -24,14 +28,23 @@ to the module which is meant to be as a minimalist solution for developers to us
 
 Insta uses a number of open source projects to work properly:
 
-* [requests] - HTTP Requests for humans!
-### Installation
+*Python [requests] - HTTP Requests for humans!
+*.NET [RestSharp] - HTTP Library for .NET
+### Installation Python
 
 You need to install the requests library
 
 ```sh
 pip install requests
 ```
+
+### Installation .NET
+
+You need to install the RestSharp library with NuGet
+
+'''sh
+Install-Package RestSharp
+'''
 
 ### Todos
 
