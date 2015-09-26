@@ -10,8 +10,8 @@ Implementations may include:
 0.1.3 - BETA!
 
 ###Changes in 0.1.3
-  - Added certificate bypass for some experiencing cert issues with IG
-  - Introducing Insta.cs, a .NET couterpart for use in .NET applications. Works flawlessly.
+  	- Added certificate bypass for some experiencing cert issues with IG
+	- Introducing Insta.cs, a .NET couterpart for use in .NET applications. Works flawlessly.
 
 ####Changes in 0.1.2
 	- Added GET functionality
