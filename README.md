@@ -42,7 +42,7 @@ pip install requests
 
 You need to install the RestSharp library with NuGet
 
-'''sh
+```sh
 Install-Package RestSharp
 '''
 
